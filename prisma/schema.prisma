@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Deck {
+  id    String   @id @default(cuid())
+  name  String   @unique
+  createdAt DateTime @default(now())
+  cards Card[]
+}
+
+model Card {
+  id            String @id @default(cuid())
+  question      String
+  answers       String // stored as JSON string
+  correctAnswer String
+  createdAt     DateTime @default(now())
+  
+  deckId String
+  deck   Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  
+  @@unique([deckId, question])
+}
+
+model QuizResult {
+  id        String @id @default(cuid())
+  cardId    String
+  isCorrect Boolean
+  userAnswer String
+  createdAt DateTime @default(now())
+}
