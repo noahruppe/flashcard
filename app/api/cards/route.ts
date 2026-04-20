@@ -42,24 +42,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-
-    const card = await prisma.card.delete({
-      where: { id },
-    });
-
-    return NextResponse.json(card);
-  } catch (error) {
-    console.error("Error deleting card:", error);
-    return NextResponse.json(
-      { error: "Failed to delete card" },
-      { status: 500 }
-    );
-  }
-}
